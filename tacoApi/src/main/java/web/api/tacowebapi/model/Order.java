@@ -1,12 +1,14 @@
 package web.api.tacowebapi.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity
+@Data
 @Table(name="Taco_Order")
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
