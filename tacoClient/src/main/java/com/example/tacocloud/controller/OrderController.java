@@ -10,11 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Slf4j
 @Controller
 @RequestMapping("/orders")
 public class OrderController {
+    private RestTemplate rest = new RestTemplate();
     @GetMapping("/current")
     public String orderForm(Model model) {
         model.addAttribute("order", new Order());
@@ -25,7 +29,13 @@ public class OrderController {
         if (errors.hasErrors()) {
             return "orderForm";
         }
-        log.info("Order submitted: " + order);
+        rest.postForObject("http://localhost:8080/orders", order, Order.class);
         return "redirect:/";
+    }
+    @GetMapping("/list")
+    public String orderList(Model model) {
+        Order[] orders = rest.getForObject("http://localhost:8080/orders", Order[].class);
+        model.addAttribute("orders", orders);
+        return "orderList";
     }
 }
